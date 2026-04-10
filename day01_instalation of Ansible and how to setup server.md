@@ -1,7 +1,3 @@
-Alright — I’ll explain this **step by step in simple English**, then give you a **real DevOps-style setup (Ansible + AWS + SSH + Inventory + Groups)** and also a **3D-style diagram**.
-
----
-
 # 🔹 1. What is Ansible?
 
 👉 **Ansible** is an **automation tool** used in DevOps.

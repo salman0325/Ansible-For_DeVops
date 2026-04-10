@@ -1,6 +1,4 @@
-Perfect! Tum basically **Ansible ko use karke 5 servers pe Nginx install karna aur root ke bina deploy karna** chahte ho, aur **inventory ko custom location `/home/webserver` pe rakhna**. Main step-by-step full guide de raha hoon.
 
----
 
 # 1️⃣ Ansible Installation (Ubuntu)
 

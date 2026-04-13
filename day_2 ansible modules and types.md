@@ -1,3 +1,29 @@
+
+# 🔥 1️⃣ Important Ansible Files (short)
+
+### 📄 1. `ansible.cfg`
+
+👉 Settings file (Ansible ka behavior control)
+
+### 📄 2. `hosts` (Inventory)
+
+👉 Servers list (kin machines par run karna hai)
+
+### 📄 3. Playbook (`.yml`)
+
+👉 Automation script
+
+```yaml
+- hosts: web
+  tasks:
+    - name: install nginx
+      apt:
+        name: nginx
+        state: present
+```
+
+
+
 # 📘 Ansible Modules, Commands & NFS Setup (Complete Guide)
 
 ---
@@ -158,48 +184,261 @@ sudo mkdir /mnt/nfs
 sudo mount 192.168.1.10:/nfs_share /mnt/nfs
 ```
 
----
 
-## 🔁 Permanent Mount
 
-```bash
-sudo nano /etc/fstab
-```
 
-Add:
-
-```bash
-192.168.1.10:/nfs_share /mnt/nfs nfs defaults 0 0
-```
 
 ---
 
-# 🔹 6. Common Ansible Commands
+# 🔥 2️⃣ Most Important Modules (REAL USE)
 
-## 🔸 Ping
+Ab main tumhe **top modules + commands + options** deta hoon 👇
+
+---
+
+# 🔹 1. 📦 package module (apt/yum)
+
+### ✅ Install package
 
 ```bash
-ansible all -m ping
+ansible web -m apt -a "name=nginx state=present"
 ```
 
-## 🔸 Install Package
+### ❌ Remove package
 
 ```bash
-ansible all -m apt -a "name=nginx state=present" --become
+ansible web -m apt -a "name=nginx state=absent"
 ```
 
-## 🔸 Copy File
+### 🔄 Update
 
 ```bash
-ansible all -m copy -a "src=file.txt dest=/tmp/"
+ansible web -m apt -a "update_cache=yes"
 ```
 
-## 🔸 Start Service
+👉 Important options:
+
+* `name=` → package name
+* `state=` → present / absent / latest
+
+---
+
+# 🔹 2. 📁 copy module
+
+### File copy
 
 ```bash
-ansible all -m service -a "name=nginx state=started" --become
+ansible web -m copy -a "src=file.txt dest=/tmp/file.txt"
+```
+
+👉 Options:
+
+* `src=` → local file
+* `dest=` → remote path
+* `mode=` → permission
+
+---
+
+# 🔹 3. 📂 file module
+
+### Create directory
+
+```bash
+ansible web -m file -a "path=/data state=directory"
+```
+
+### Delete file
+
+```bash
+ansible web -m file -a "path=/data state=absent"
+```
+
+👉 Options:
+
+* `path=`
+* `state=` → file / directory / absent
+* `mode=`
+
+---
+
+# 🔹 4. 🔍 find module
+
+```bash
+ansible web -m find -a "paths=/tmp patterns=*.log"
+```
+
+👉 Options:
+
+* `paths=`
+* `patterns=`
+* `age=`
+
+---
+
+# 🔹 5. 👤 user module (VERY IMPORTANT 🔥)
+
+### ✅ Create user
+
+```bash
+ansible web -m user -a "name=ali state=present"
+```
+
+### ❌ Delete user
+
+```bash
+ansible web -m user -a "name=ali state=absent"
+```
+
+### ➕ Add to group
+
+```bash
+ansible web -m user -a "name=ali groups=sudo append=yes"
+```
+
+👉 Options:
+
+* `name=`
+* `state=`
+* `groups=`
+* `append=yes`
+
+---
+
+# 🔹 6. 👥 group module
+
+### Create group
+
+```bash
+ansible web -m group -a "name=dev state=present"
+```
+
+### Delete group
+
+```bash
+ansible web -m group -a "name=dev state=absent"
 ```
 
 ---
 
+# 🔹 7. 🔧 service module
+
+### Start service
+
+```bash
+ansible web -m service -a "name=nginx state=started"
+```
+
+### Stop
+
+```bash
+ansible web -m service -a "name=nginx state=stopped"
+```
+
+### Restart
+
+```bash
+ansible web -m service -a "name=nginx state=restarted"
+```
+
+### Enable on boot
+
+```bash
+ansible web -m service -a "name=nginx enabled=yes"
+```
+
+---
+
+# 🔹 8. 📥 fetch module (reverse copy)
+
+```bash
+ansible web -m fetch -a "src=/var/log/syslog dest=./backup/"
+```
+
+👉 Remote → Local copy
+
+---
+
+# 🔹 9. ⚡ command module
+
+```bash
+ansible web -m command -a "uptime"
+```
+
+👉 Simple command run (no shell features)
+
+---
+
+# 🔹 10. 💻 shell module
+
+```bash
+ansible web -m shell -a "echo hello > /tmp/test.txt"
+```
+
+👉 Use when:
+
+* pipes |
+* redirects >
+
+---
+
+# 🔹 11. 🔗 ping module
+
+```bash
+ansible web -m ping
+```
+
+👉 Check connectivity
+
+---
+
+# 🔥 3️⃣ Most Used Flags (IMPORTANT)
+
+| Flag       | Meaning        |
+| ---------- | -------------- |
+| `-m`       | module         |
+| `-a`       | arguments      |
+| `-i`       | inventory file |
+| `-u`       | user           |
+| `--become` | sudo           |
+| `-k`       | ask password   |
+
+---
+
+### Example:
+
+```bash
+ansible web -m apt -a "name=nginx state=present" -u ubuntu --become
+```
+
+---
+
+# 🔥 4️⃣ Real DevOps Flow (IMPORTANT 🚀)
+
+1. Inventory (`hosts`)
+2. Config (`ansible.cfg`)
+3. Test (`ping`)
+4. Run module / playbook
+
+---
+
+# 🔥 FINAL SHORT SUMMARY
+
+👉 Important modules:
+
+* package (apt/yum)
+* copy
+* file
+* find
+* user 👤
+* group 👥
+* service 🔧
+* fetch
+* command
+* shell
+
+👉 Sab se zyada use:
+✔ user
+✔ package
+✔ service
+✔ copy
 

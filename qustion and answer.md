@@ -1,4 +1,4 @@
-# 🔥 1. What is Ansible?
+#  1. What is Ansible?
 
 👉 **Answer (Interview Style):**
 “Ansible is an agentless automation tool used for configuration management, application deployment, and orchestration. It uses SSH to connect to servers and execute tasks.”
